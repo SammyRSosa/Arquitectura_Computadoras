@@ -1,0 +1,121 @@
+%include "io.inc"
+section .data
+; Define the array and its size
+array dw 10, 5, 15, 2, 8, 4
+size dd 6
+pertenece db 'T', 0   
+no_pertenece db 'F', 0
+
+; Define a variable to store the number
+number dd 5
+
+; Reserve space for the new arrays (adjust size based on your needs)
+section .bss
+multiples resb 6
+non_multiples resb 6
+
+section .text
+global main
+
+main:
+    mov ebp, esp  ; Set up stack frame
+    
+    ; Push size and number onto the stack for calculate_arrays
+    
+    
+    push dword [size]
+    push dword [number]
+    
+    call calculate_arrays
+    add esp, 8      ; Restore stack
+    
+    ; Print the original array for reference (optional)
+    ; ...
+    ; Print the multiples array (adjust printing syntax for your assembler)
+    mov eax, multiples  ; Address of multiples array
+    PRINT_STRING "Multiples: "
+    
+    mov ecx,0
+    
+    .while1:
+    cmp ecx,ebx
+    je .go
+    NEWLINE
+    PRINT_UDEC 1, [multiples + ecx];
+    inc ecx
+    jmp .while1
+    
+    .go:
+    mov ecx,0
+    NEWLINE
+    PRINT_STRING "Non Multiples: "
+    jmp .while2
+    
+    .while2:
+    cmp ecx,esi
+    je .end
+    NEWLINE
+    PRINT_UDEC 1, [non_multiples + ecx];
+    inc ecx
+    jmp .while2
+    
+      
+            
+    .end:
+    ret
+
+    ret
+
+; Function to calculate multiples and non-multiples
+calculate_arrays:
+    mov ebp, esp  ; Set up stack frame
+    mov ecx, 0      ; Initialize index for loop
+    mov ebx,0
+    mov esi,0
+
+.loop:
+    cmp ecx, [size]  ; Compare index with array size (passed as argument)
+    je .end      ; If equal, finish loop
+    
+    ; Load current element
+    
+    mov edi,ecx
+    imul edi,2
+    mov ax, word [array + edi]
+  
+    
+    ; Check for divisibility:
+    movzx eax, ax  ; Zero-extend to 32-bit for division
+    cdq            ; Extend sign for signed division (adjust if unsigned)
+    idiv dword [ebp + 4]  ; Divide by number
+    cmp edx, 0      ; Check remainder
+    
+    
+    je .multiple  ; If zero, it's a multiple
+
+.not_multiple:
+    ; Store in non-multiples array
+    mov ax, word [array + edi]
+    mov [non_multiples + esi], ax  ; Adjust offset based on allocated space
+    inc esi
+    jmp .next      ; Continue loop
+
+.multiple:
+    ; Store in multiples array
+    mov ax, word [array + edi]
+    mov [multiples + ebx], ax    ; Adjust offset based on allocated space
+    
+    inc ebx
+    
+    
+.next:
+    inc ecx      ; Increment index
+    jmp .loop
+
+.end:
+    ret
+
+; Function to print an array (modify as needed based on your assembler)
+print_array:
+    ; ... (implementation for printing elements of the array)
+    ret
