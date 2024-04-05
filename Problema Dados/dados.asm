@@ -1,13 +1,15 @@
 %include "io.inc"
 section .data
-n dw 6
+n dw 2
+caras dw 6
 section .text
 global main
 main:
     mov ebp, esp ; for correct debugging
-    GET_DEC 4, ecx ; read first number
+    mov ecx,0
+    mov cx, word[n]
     mov eax,1
-    mov bx, [n]
+    mov bx, [caras]
     .while:
         cmp ecx, 0
         je .end
@@ -18,5 +20,4 @@ main:
     .end :
     PRINT_DEC 4, eax ; print result
     NEWLINE ; print newline
-    xor eax, eax ; set eax to 0
     ret ; return

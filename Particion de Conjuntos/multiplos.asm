@@ -9,7 +9,7 @@ no_pertenece db 'F', 0
 ; Define a variable to store the number
 number dd 5
 
-; Reserve space for the new arrays (adjust size based on your needs)
+; Reserve space for the new arrays 
 section .bss
 multiples resb 6
 non_multiples resb 6
@@ -18,7 +18,7 @@ section .text
 global main
 
 main:
-    mov ebp, esp  ; Set up stack frame
+    mov ebp, esp  
     
     ; Push size and number onto the stack for calculate_arrays
     
@@ -29,10 +29,8 @@ main:
     call calculate_arrays
     add esp, 8      ; Restore stack
     
-    ; Print the original array for reference (optional)
-    ; ...
-    ; Print the multiples array (adjust printing syntax for your assembler)
-    mov eax, multiples  ; Address of multiples array
+
+    mov eax, multiples  
     PRINT_STRING "Multiples: "
     
     mov ecx,0
@@ -96,14 +94,14 @@ calculate_arrays:
 .not_multiple:
     ; Store in non-multiples array
     mov ax, word [array + edi]
-    mov [non_multiples + esi], ax  ; Adjust offset based on allocated space
+    mov [non_multiples + esi], ax  
     inc esi
     jmp .next      ; Continue loop
 
 .multiple:
     ; Store in multiples array
     mov ax, word [array + edi]
-    mov [multiples + ebx], ax    ; Adjust offset based on allocated space
+    mov [multiples + ebx], ax   
     
     inc ebx
     
@@ -115,7 +113,3 @@ calculate_arrays:
 .end:
     ret
 
-; Function to print an array (modify as needed based on your assembler)
-print_array:
-    ; ... (implementation for printing elements of the array)
-    ret
